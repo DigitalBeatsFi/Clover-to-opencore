@@ -13,7 +13,7 @@ clover_file="$1"
 opencore_file="$2"
 
 # Luodaan uusi tiedosto OpenCorelle
-output_file="opencore_acpi.plist"
+output_file="opencore_config.plist"
 
 # Muunnetaan Cloverin ACPI-asetukset OpenCorelle
 sed -n '/<key>ACPI<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
@@ -33,5 +33,11 @@ sed -i '' 's/<key>DropTables<\/key>/<key>Drop:<\/key>/g' "$output_file"
 # Lisätään uudelle riville "Enabled" tekstin tilalle "Enabled:"
 sed -i '' 's/<key>FixHeaders<\/key>/<key>FixHeaders:<\/key>/g' "$output_file"
 
+# Lisätään OpenCoren Booter-asetukset Clover-tiedoston perään
+sed -n '/<key>Boot<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
+
+# Lisätään OpenCoren DeviceProperties-asetukset Clover-tiedoston perään
+sed -n '/<key>Devices<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
+
 # Tulostetaan muunnos onnistuneesti
-echo "ACPI-asetukset on muunnettu onnistuneesti tiedostosta $clover_file tiedostoon $output_file OpenCorelle."
+echo "ACPI-, Booter- ja DeviceProperties-asetukset on muunnettu onnistuneesti tiedostosta $clover_file tiedostoon $output_file OpenCorelle."
