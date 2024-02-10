@@ -51,5 +51,32 @@ sed -i '' 's/<key>Misc<\/key>/<key>Misc:<\/key>/g' "$output_file"
 # Lisätään OpenCoren Misc-asetukset Clover-tiedoston perään
 sed -n '/<key>Boot<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
 
+# Muunnetaan Cloverin NVRAM-asetukset OpenCorelle
+sed -n '/<key>RtVariables<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
+
+# Lisätään uudelle riville "RtVariables" tekstin tilalle "RtVariables:"
+sed -i '' 's/<key>RtVariables<\/key>/<key>RtVariables:<\/key>/g' "$output_file"
+
+# Lisätään OpenCoren NVRAM-asetukset Clover-tiedoston perään
+sed -n '/<key>Boot<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
+
+# Muunnetaan Cloverin PlatformInfo-asetukset OpenCorelle
+sed -n '/<key>SMBIOS<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
+
+# Lisätään uudelle riville "SMBIOS" tekstin tilalle "PlatformInfo:"
+sed -i '' 's/<key>SMBIOS<\/key>/<key>PlatformInfo:<\/key>/g' "$output_file"
+
+# Lisätään OpenCoren PlatformInfo-asetukset Clover-tiedoston perään
+sed -n '/<key>NVRAM<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
+
+# Muunnetaan Cloverin UEFI-asetukset OpenCorelle
+sed -n '/<key>UEFI<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
+
+# Lisätään uudelle riville "UEFI" tekstin tilalle "UEFI:"
+sed -i '' 's/<key>UEFI<\/key>/<key>UEFI:<\/key>/g' "$output_file"
+
+# Lisätään OpenCoren UEFI-asetukset Clover-tiedoston perään
+sed -n '/<key>Boot<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
+
 # Tulostetaan muunnos onnistuneesti
 echo "Cloverista OpenCoreen muunnos suoritettu. Tulostettu tiedostoon: $output_file."
