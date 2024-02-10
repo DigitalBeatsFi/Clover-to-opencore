@@ -15,29 +15,24 @@ opencore_file="$2"
 # Luodaan uusi tiedosto OpenCorelle
 output_file="opencore_config.plist"
 
-# Muunnetaan Cloverin ACPI-asetukset OpenCorelle
-sed -n '/<key>ACPI<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
+# Muunnetaan Cloverin KernelAndKextPatches-asetukset OpenCorelle
+sed -n '/<key>KernelAndKextPatches<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
 
-# Lisätään uudelle riville "ACPI:" tekstin tilalle ":"
-sed -i '' 's/<key>ACPI<\/key>/<key>:<\/key>/g' "$output_file"
-
-# Korvataan "AutoMerge" avain "MergeMask" avaimella
-sed -i '' 's/<key>AutoMerge<\/key>/<key>MergeMask<\/key>/g' "$output_file"
-
-# Lisätään uudelle riville "Add" tekstin tilalle "Add:"
-sed -i '' 's/<key>AddProperties<\/key>/<key>Add:<\/key>/g' "$output_file"
-
-# Lisätään uudelle riville "Drop" tekstin tilalle "Drop:"
-sed -i '' 's/<key>DropTables<\/key>/<key>Drop:<\/key>/g' "$output_file"
+# Lisätään uudelle riville "Kernel" tekstin tilalle "Kernel:"
+sed -i '' 's/<key>KernelAndKextPatches<\/key>/<key>Kernel:<\/key>/g' "$output_file"
 
 # Lisätään uudelle riville "Enabled" tekstin tilalle "Enabled:"
-sed -i '' 's/<key>FixHeaders<\/key>/<key>FixHeaders:<\/key>/g' "$output_file"
+sed -i '' 's/<key>AppleRTC<\/key>/<key>AppleRTC:<\/key>/g' "$output_file"
+sed -i '' 's/<key>DellSMBIOSPatch<\/key>/<key>DellSMBIOSPatch:<\/key>/g' "$output_file"
+sed -i '' 's/<key>ForceKextsToLoad<\/key>/<key>ForceKextsToLoad:<\/key>/g' "$output_file"
+sed -i '' 's/<key>KernelLapic<\/key>/<key>KernelLapic:<\/key>/g' "$output_file"
+sed -i '' 's/<key>KernelPm<\/key>/<key>KernelPm:<\/key>/g' "$output_file"
 
-# Lisätään OpenCoren Booter-asetukset Clover-tiedoston perään
+# Lisätään uudelle riville "KernelToPatch" tekstin tilalle "KernelToPatch:"
+sed -i '' 's/<key>KernelToPatch<\/key>/<key>KernelToPatch:<\/key>/g' "$output_file"
+
+# Lisätään OpenCoren Kernel-asetukset Clover-tiedoston perään
 sed -n '/<key>Boot<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
 
-# Lisätään OpenCoren DeviceProperties-asetukset Clover-tiedoston perään
-sed -n '/<key>Devices<\/key>/,/<\/dict>/p' "$clover_file" >> "$output_file"
-
 # Tulostetaan muunnos onnistuneesti
-echo "ACPI-, Booter- ja DeviceProperties-asetukset on muunnettu onnistuneesti tiedostosta $clover_file tiedostoon $output_file OpenCorelle."
+echo "KernelAndKextPatches-asetukset on muunnettu onnistuneesti tiedostosta $clover_file tiedostoon $output_file OpenCorelle."
