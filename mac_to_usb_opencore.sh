@@ -1,7 +1,7 @@
 #!/bin/bash
 # Create a bootable macOS flash drive on Linux and macOS
 # (c) notthebee, corpnewt
-# url: https://github.com/notthebee/macos_usb
+# url: https://github.com/DigitalBeatsFi/Clover-to-opencore
 
 # The script will terminate if any subsequent command fails
 set -e
