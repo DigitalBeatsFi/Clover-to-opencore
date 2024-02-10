@@ -1,29 +1,37 @@
 #!/bin/bash
 
-# Tarkista, onko Cloverin config.plist-tiedosto olemassa.
-if [ ! -f "$1" ]; then
-    echo "Virhe: Cloverin config.plist-tiedostoa ei löydy."
+# Tarkistetaan, että käyttäjä on antanut molemmat tiedostot parametreiksi
+if [ "$#" -ne 2 ]; then
+    echo "Käytä skriptiä seuraavasti: $0 clover.plist opencore.plist"
     exit 1
 fi
 
-# Määritä Cloverin config.plist -tiedoston sijainti.
-clover_config="$1"
+# Kopioidaan Clover-tiedoston polku muuttujaan
+clover_file="$1"
 
-# Määritä OpenCoren config.plist -tiedoston sijainti.
-opencore_config="$2"
+# Kopioidaan OpenCore-tiedoston polku muuttujaan
+opencore_file="$2"
 
-# Funktio muuntaa koko Cloverin config.plist-tiedoston OpenCorelle sopivaksi.
-convert_clover_to_opencore() {
-    # Tee varmuuskopio alkuperäisestä OpenCoren config.plist-tiedostosta
-    cp "$opencore_config" "$opencore_config.bak"
+# Luodaan uusi tiedosto OpenCorelle
+output_file="opencore_acpi.plist"
 
-    # Korvaa koko OpenCoren config.plist-tiedosto Cloverin config.plist-tiedostolla
-    cp "$clover_config" "$opencore_config"
+# Muunnetaan Cloverin ACPI-asetukset OpenCorelle
+sed -n '/<key>ACPI<\/key>/,/<\/dict>/p' "$clover_file" > "$output_file"
 
-    echo "Cloverin config.plist-tiedosto on muunnettu OpenCorelle sopivaksi."
-}
+# Lisätään uudelle riville "ACPI:" tekstin tilalle ":"
+sed -i '' 's/<key>ACPI<\/key>/<key>:<\/key>/g' "$output_file"
 
-# Kutsu funktiota muuntaaksesi config.plist-tiedosto
-convert_clover_to_opencore
+# Korvataan "AutoMerge" avain "MergeMask" avaimella
+sed -i '' 's/<key>AutoMerge<\/key>/<key>MergeMask<\/key>/g' "$output_file"
 
-echo "Muunnos suoritettu."
+# Lisätään uudelle riville "Add" tekstin tilalle "Add:"
+sed -i '' 's/<key>AddProperties<\/key>/<key>Add:<\/key>/g' "$output_file"
+
+# Lisätään uudelle riville "Drop" tekstin tilalle "Drop:"
+sed -i '' 's/<key>DropTables<\/key>/<key>Drop:<\/key>/g' "$output_file"
+
+# Lisätään uudelle riville "Enabled" tekstin tilalle "Enabled:"
+sed -i '' 's/<key>FixHeaders<\/key>/<key>FixHeaders:<\/key>/g' "$output_file"
+
+# Tulostetaan muunnos onnistuneesti
+echo "ACPI-asetukset on muunnettu onnistuneesti tiedostosta $clover_file tiedostoon $output_file OpenCorelle."
