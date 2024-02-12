@@ -178,6 +178,7 @@ function create_opencore_efi {
     git clone https://github.com/acidanthera/OpenCorePkg.git opencore
     create_opencore_efi
 }
+    
     else
         echo "Error: OpenCore directory structure is not as expected."
         exit 1
