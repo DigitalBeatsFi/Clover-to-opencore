@@ -162,8 +162,13 @@ function create_opencore_efi {
     echo "Creating OpenCore EFI directory"
     mkdir -p OpenCoreEFI/EFI/BOOT
     mkdir -p OpenCoreEFI/EFI/OC
-    cp -r opencore/EFI/BOOT/* OpenCoreEFI/EFI/BOOT/
-    cp -r opencore/EFI/OC/* OpenCoreEFI/EFI/OC/
+    if [ -d "opencore" ]; then
+        cp -r opencore/EFI/BOOT/* OpenCoreEFI/EFI/BOOT/
+        cp -r opencore/EFI/OC/* OpenCoreEFI/EFI/OC/
+    else
+        echo "Error: OpenCore directory not found."
+        exit 1
+    fi
 }
 
 function prepare_opencore {
