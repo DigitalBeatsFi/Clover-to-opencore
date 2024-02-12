@@ -158,23 +158,30 @@ function burn {
 	esac
 }
 
+function prepare_opencore {
+    echo "Downloading and preparing OpenCore"
+    if ! git clone https://github.com/acidanthera/OpenCorePkg.git opencore; then
+        echo "Error: Failed to clone OpenCore repository."
+        exit 1
+    fi
+    create_opencore_efi
+}
+
 function create_opencore_efi {
     echo "Creating OpenCore EFI directory"
     mkdir -p OpenCoreEFI/EFI/BOOT
     mkdir -p OpenCoreEFI/EFI/OC
-    if [ -d "opencore" ]; then
+    if [ -d "opencore/EFI/BOOT" ] && [ -d "opencore/EFI/OC" ]; then
         cp -r opencore/EFI/BOOT/* OpenCoreEFI/EFI/BOOT/
-        cp -r opencore/EFI/OC/* OpenCoreEFI/EFI/OC/
-    else
-        echo "Error: OpenCore directory not found."
-        exit 1
-    fi
-}
-
-function prepare_opencore {
+        cp -r opencore/EFI/OC/* OpenCoreEFI/EFI/OC/function prepare_opencore {
     echo "Downloading and preparing OpenCore"
     git clone https://github.com/acidanthera/OpenCorePkg.git opencore
     create_opencore_efi
+}
+    else
+        echo "Error: OpenCore directory structure is not as expected."
+        exit 1
+    fi
 }
 
 checkdep
